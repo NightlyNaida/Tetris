@@ -1,0 +1,42 @@
+@require 'variables'
+
+html,body
+    margin 0
+    padding 0
+
+.outspace
+    background-color clr_background
+    height 100vh
+    width 100vw
+    position relative 
+
+.tetris-area
+    background-color clr_dark-green
+    width 600px
+    height 500px
+    position absolute
+    top 50px
+    left 300px
+    border-radius 30px
+    display grid
+    grid-template-columns 3fr 2fr
+
+.game-area
+    padding 20px 20px
+
+.tetris-grid
+    background-color clr_background
+    height 100%
+    border-radius 5px
+    display grid
+    grid-template-columns repeat(10,1fr)
+    grid-template-rows repeat(15,1fr)
+
+.tetris-cell
+    border 1px solid clr_grey
+
+.tetris-cell-yellow
+    background-color yellow
+
+
+

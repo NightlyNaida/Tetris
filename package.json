@@ -1,0 +1,39 @@
+{
+  "name": "tetris",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sayhello": "node getFiles.js"
+  },
+  "author": "NightlyNaida",
+  "license": "ISC",
+  "browserslist": [
+    "last 10 version"
+  ],
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-csso": "^3.0.1",
+    "gulp-load-plugins": "^2.0.1",
+    "gulp-notify": "^3.2.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-stylus": "^2.7.0",
+    "gulp-svg-sprite": "^1.5.0"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NightlyNaida/Banana.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NightlyNaida/Banana/issues"
+  },
+  "homepage": "https://github.com/NightlyNaida/Banana#readme"
+}
