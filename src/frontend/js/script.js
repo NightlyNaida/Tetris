@@ -269,28 +269,34 @@ function drawCurrentFigure(){ //отрисовка фигуры
     }
 }
 
-function generateNewFigure(){
-    console.log('start generate new figure...');
+function generateNewFigure(){ // функция генерации новых фигур(собираем все имена фигур, генерируем рандомно индекс и генерируем фигуру)
+    console.log('start generate new figure...');  //логирование
     
-    let nameFigures = [];
+    let nameFigures = []; // сюда складываем все названия фигур 
 
-    for(let key in figures){
+    for(let key in figures){ //процесс складывания названий
         nameFigures.push(key);
     }
 
-    console.log('figures array...');
+    console.log('figures array...'); //лолгируем получившийся массив
     console.log(nameFigures);
 
-    console.log('generate index...');
+    console.log('generate index...');//запуск поиска рандомного числа
     let index = (Math.round(Math.random()*nameFigures.length))-1;
-    if(index < 0 ){
+    if(index < 0 ){//проверяем индекс на корректность (должен находиться в пределах массива имен)
         index = 0;
     }
-    console.log('index is ' + index);
+    else if(index > (figures.length - 1)){
+        index = figures.length - 1;
+    }
+    console.log('index is ' + index); //логируем индекс и затем фигуру
     console.log('the name of current figure is' + nameFigures[index]);
-    setCurrentFigure(figures[nameFigures[index]],0);
-    drawCurrentFigure();
-    console.log(currentFigure);
+
+
+    setCurrentFigure(figures[nameFigures[index]],0);//запускаем функцию смены текущей фигуры
+    currentFigureWayX = 0; //обнуляем переменные движения текущей фигуры
+    currentFigureWayY = 0;
+    drawCurrentFigure();// запускаем функцию отрисовки фигуры
 }
 
 
