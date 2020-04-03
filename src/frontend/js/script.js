@@ -149,6 +149,8 @@ function setCurrentFigure(figure,rotate){
 
 
     currentFigure = {
+        name: figure.name,
+        currentRotate: rotate,
         firstCube:{
             x: figure.rotates[namesOfRotates[rotate]].firstCube.x,
             y: figure.rotates[namesOfRotates[rotate]].firstCube.y
@@ -182,6 +184,10 @@ $(window).keydown(function(e){
 
 
     switch(e.keyCode){
+        case 38:{
+            changeRotate();
+        }
+        break;
         case 37:{
             function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
                 return element < 1;                     //если хотя бы один кубик меньше единицы, то срабатывает
@@ -297,6 +303,34 @@ function generateNewFigure(){ // функция генерации новых ф
     currentFigureWayX = 0; //обнуляем переменные движения текущей фигуры
     currentFigureWayY = 0;
     drawCurrentFigure();// запускаем функцию отрисовки фигуры
+}
+
+
+function changeRotate () { //функция поворота фигуры
+    var countOFRotates = 0; //считаем количество возможных повортов у текущей фигуры
+
+    console.log('count of possible rotates...')
+    for(var key in figures[currentFigure.name].rotates){
+        countOFRotates++;
+    }
+    console.log('possible rotates - ' + countOFRotates);
+    
+    if(countOFRotates > 1){ //если возможных поворотов больше одного, то запускаем процесс поворота
+        console.log('start rotate process'); 
+        if(((currentFigure.currentRotate + 1) < countOFRotates) || currentFigure.currentRotate + 1 == 1){  //если положение текущей фигуры в переделах допустимого диапазона
+            console.log('current rotate within the allowable range');
+            drawCurrentFigure(); //закрашиваем текущую фигуру
+            setCurrentFigure(figures[currentFigure.name],currentFigure.currentRotate + 1); //переворачиваем фигуру
+            drawCurrentFigure(); //красим на новом месте
+        }
+        else 
+            if(currentFigure.currentRotate + 1 >= countOFRotates){
+                console.log('the current rotate is more or equals max valuse. Set rotate to 0');
+                drawCurrentFigure();
+                setCurrentFigure(figures[currentFigure.name],0);
+                drawCurrentFigure();
+        }
+    }
 }
 
 
