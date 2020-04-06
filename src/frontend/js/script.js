@@ -286,11 +286,24 @@ function checkRowsForFull(){
                     for(let cell in frontGrid[i]){
                         $(frontGrid[i][cell]).toggleClass('tetris-cell-yellow');
                     }
+                    dropDownCubes(i);
                 }
             }
             else{
                 //console.log('cell is background color. Break cycle...');
                 break;  
+            }
+        }
+    }
+}
+
+function dropDownCubes(index){
+    index--;
+    for(;index >= 0; index--){
+        for(let cell in frontGrid[index]){
+            if($(frontGrid[index][cell]).hasClass('tetris-cell-yellow')){
+                $(frontGrid[index][cell]).toggleClass('tetris-cell-yellow');
+                $(frontGrid[(index + 1)][cell]).toggleClass('tetris-cell-yellow');
             }
         }
     }
