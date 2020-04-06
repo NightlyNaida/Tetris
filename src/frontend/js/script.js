@@ -9,7 +9,7 @@ var currentFigure;
 
 function setCurrentFigure(figure,rotate){
 
-    console.log('start set figure ' + figure.name);
+    //console.log('start set figure ' + figure.name);
 
     var namesOfRotates = [];
 
@@ -17,8 +17,8 @@ function setCurrentFigure(figure,rotate){
         namesOfRotates.push(key);
     }
 
-    console.log('namesOfRotates is complete');
-    console.log(namesOfRotates);
+    //console.log('namesOfRotates is complete');
+    //console.log(namesOfRotates);
 
 
 
@@ -60,6 +60,11 @@ $(window).keydown(function(e){
 
 
     switch(e.keyCode){
+        case 13:{
+            checkRowsForFull();
+        }
+        break;
+
         case 38:{
             changeRotate();
         }
@@ -88,7 +93,7 @@ $(window).keydown(function(e){
             }
 
             if(!(allY.some(isMoreBottomCell))){ //сначала проверяем ограничение по полю, а затем проверяем пространство ниже каждого
-                console.log('start check place below figure...');
+                //console.log('start check place below figure...');
 
                 function isContainFalse(element,index,arr){
                     return element == false;
@@ -135,19 +140,19 @@ function figureIsCanMove (directionY, directionX){
         
         let cellUnderCheck = frontGrid[currentY][currentX]; //в переменную запоминаем ЯЧЕЙКУ, которую будем проверять на заполнение
 
-        console.log('check cell by adress y' + currentY + ' x' + currentX);
+        //console.log('check cell by adress y' + currentY + ' x' + currentX);
 
         if($(cellUnderCheck).hasClass('tetris-cell-yellow')){ //если у ячейки есть класс, то она занята
-            console.log("cell to check is under suspicion","start compare cell with currentFigure's cubes...");
+            //console.log("cell to check is under suspicion","start compare cell with currentFigure's cubes...");
             
             function checkCubes(){ //сравние координат проверяемой ячейки с кубиками фигуры, которая сейчас активна
                 for(let key in currentFigure.cubes){
-                    console.log('compare cube y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' with cell y' + currentY);
+                    //console.log('compare cube y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' with cell y' + currentY);
                     if((currentFigure.cubes[key].y + currentFigureWayY) == currentY){
-                        console.log('cF y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' is Equal current cell y' + currentY);
+                        //console.log('cF y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' is Equal current cell y' + currentY);
                         if((currentFigure.cubes[key].x + + currentFigureWayX) == currentX){
-                            console.log('cF x' + (currentFigure.cubes[key].x + currentFigureWayX) + ' is Equal current cell x' + currentX);
-                            console.log('the cell to check is occupied by currentFigure cube');
+                            //console.log('cF x' + (currentFigure.cubes[key].x + currentFigureWayX) + ' is Equal current cell x' + currentX);
+                            //console.log('the cell to check is occupied by currentFigure cube');
                             return true;
                         }
                     }
@@ -170,10 +175,10 @@ function figureIsCanMove (directionY, directionX){
 }
 
 function checkPosition(){ //пеоебираем кубики фигуры и проверяем их колизию
-    console.log('check position');
+    //console.log('check position');
     for (let key in currentFigure.cubes){
         if(currentFigure.cubes[key].y + currentFigureWayY == frontGrid.length - 1){
-            console.log('position is bottom');
+            //console.log('position is bottom');
             return true;
         }
     }
@@ -199,18 +204,19 @@ function drawCurrentFigure(){ //отрисовка фигуры
             let y = currentFigure.cubes[key].y + currentFigureWayY;
             let x = currentFigure.cubes[key].x + currentFigureWayX;
 
-            console.log("draw cell in adress y" + y + '  x' + x);
+            //console.log("draw cell in adress y" + y + '  x' + x);
 
             $(frontGrid[y][x]).toggleClass('tetris-cell-yellow');
         }
         catch{
-            console.log("ERROR. Try paint cube is failed");
+            //console.log("ERROR. Try paint cube is failed");
         };
     }
 }
 
 function generateNewFigure(){ // функция генерации новых фигур(собираем все имена фигур, генерируем рандомно индекс и генерируем фигуру)
-    console.log('start generate new figure...');  //логирование
+    //console.log('start generate new figure...');  //логирование
+    checkRowsForFull();
     
     let nameFigures = []; // сюда складываем все названия фигур 
 
@@ -218,10 +224,10 @@ function generateNewFigure(){ // функция генерации новых ф
         nameFigures.push(key);
     }
 
-    console.log('figures array...'); //лолгируем получившийся массив
-    console.log(nameFigures);
+    //console.log('figures array...'); //лолгируем получившийся массив
+    //console.log(nameFigures);
 
-    console.log('generate index...');//запуск поиска рандомного числа
+    //console.log('generate index...');//запуск поиска рандомного числа
     let index = (Math.round(Math.random()*nameFigures.length))-1;
     if(index < 0 ){//проверяем индекс на корректность (должен находиться в пределах массива имен)
         index = 0;
@@ -229,8 +235,8 @@ function generateNewFigure(){ // функция генерации новых ф
     else if(index > (figures.length - 1)){
         index = figures.length - 1;
     }
-    console.log('index is ' + index); //логируем индекс и затем фигуру
-    console.log('the name of current figure is' + nameFigures[index]);
+    //console.log('index is ' + index); //логируем индекс и затем фигуру
+    //console.log('the name of current figure is' + nameFigures[index]);
 
 
     setCurrentFigure(figures[nameFigures[index]],0);//запускаем функцию смены текущей фигуры
@@ -243,23 +249,23 @@ function generateNewFigure(){ // функция генерации новых ф
 function changeRotate () { //функция поворота фигуры
     var countOFRotates = 0; //считаем количество возможных повортов у текущей фигуры
 
-    console.log('count of possible rotates...')
+    //console.log('count of possible rotates...')
     for(var key in figures[currentFigure.name].rotates){
         countOFRotates++;
     }
-    console.log('possible rotates - ' + countOFRotates);
+    //console.log('possible rotates - ' + countOFRotates);
     
     if(countOFRotates > 1){ //если возможных поворотов больше одного, то запускаем процесс поворота
-        console.log('start rotate process'); 
+        //console.log('start rotate process'); 
         if(((currentFigure.currentRotate + 1) < countOFRotates) || currentFigure.currentRotate + 1 == 1){  //если положение текущей фигуры в переделах допустимого диапазона
-            console.log('current rotate within the allowable range');
+            //console.log('current rotate within the allowable range');
             drawCurrentFigure(); //закрашиваем текущую фигуру
             setCurrentFigure(figures[currentFigure.name],currentFigure.currentRotate + 1); //переворачиваем фигуру
             drawCurrentFigure(); //красим на новом месте
         }
         else 
             if(currentFigure.currentRotate + 1 >= countOFRotates){
-                console.log('the current rotate is more or equals max valuse. Set rotate to 0');
+                //console.log('the current rotate is more or equals max valuse. Set rotate to 0');
                 drawCurrentFigure();
                 setCurrentFigure(figures[currentFigure.name],0);
                 drawCurrentFigure();
@@ -267,6 +273,28 @@ function changeRotate () { //функция поворота фигуры
     }
 }
 
+function checkRowsForFull(){
+    console.log('start check rows...');
+    for(let i = 0; i < frontGrid.length; i++){
+        //console.log('check row ' + i);
+        for(let j = 0; j < frontGrid[i].length; j++){
+                //console.log('check cell ' + j);
+            if($(frontGrid[i][j]).hasClass('tetris-cell-yellow')){
+                //console.log('cell is yellow');
+                if(j == (frontGrid[i].length - 1)){
+                    //console.log('row is yellow','start paint row into background color...');
+                    for(let cell in frontGrid[i]){
+                        $(frontGrid[i][cell]).toggleClass('tetris-cell-yellow');
+                    }
+                }
+            }
+            else{
+                //console.log('cell is background color. Break cycle...');
+                break;  
+            }
+        }
+    }
+}
 
 drawCurrentFigure();
 
