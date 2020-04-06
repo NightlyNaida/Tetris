@@ -68,9 +68,15 @@ $(window).keydown(function(e){
             function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
                 return element < 1;                     //если хотя бы один кубик меньше единицы, то срабатывает
             }
+            function isContainFalse(element,index,arr){
+                return element == false;
+            } 
             
             if(!(allX.some(isMoreZero))){   //если коллбек не сработал, то двигаем
-                moveCurrentFigure(0,-1);
+                if(!figureIsCanMove(0,-1).some(isContainFalse))
+                {
+                    moveCurrentFigure(0,-1);
+                }
             }
 
         }
@@ -81,53 +87,14 @@ $(window).keydown(function(e){
                 return element > frontGrid.length - 2; //если хотя бы один кубик равен нижней границе, то срабатывает
             }
 
-            if(!(allY.some(isMoreBottomCell))){
+            if(!(allY.some(isMoreBottomCell))){ //сначала проверяем ограничение по полю, а затем проверяем пространство ниже каждого
                 console.log('start check place below figure...');
-
-                let checkCubesResult = [];
-
-                for(let key in currentFigure.cubes){
-
-                    let currentY = (currentFigure.cubes[key].y + currentFigureWayY + 1); //запоминаем Y координату проверяемой ячейки
-                    let currentX = (currentFigure.cubes[key].x + currentFigureWayX) //запоминаем X координату проверяемой ячейки
-                    
-                    let cellUnderCheck = frontGrid[currentY][currentX];
-
-                    console.log('check cell by adress y' + currentY + ' x' + currentX);
-
-                    if($(cellUnderCheck).hasClass('tetris-cell-yellow')){
-                        console.log("cell to check is under suspicion","start compare cell with currentFigure's cubes...");
-                        
-                        function checkCubes(){
-                            for(let key in currentFigure.cubes){
-                                console.log('compare cube y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' with cell y' + currentY);
-                                if((currentFigure.cubes[key].y + currentFigureWayY) == currentY){
-                                    console.log('cF y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' is Equal current cell y' + currentY);
-                                    if((currentFigure.cubes[key].x + + currentFigureWayX) == currentX){
-                                        console.log('cF x' + (currentFigure.cubes[key].x + currentFigureWayX) + ' is Equal current cell x' + currentX);
-                                        console.log('the cell to check is occupied by currentFigure cube');
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-
-                        if(checkCubes()){
-                            checkCubesResult.push(true);
-                        }
-                        else{
-                            checkCubesResult.push(false);
-                        }
-                    }
-                    else{
-                        checkCubesResult.push(true);
-                    }
-                } 
 
                 function isContainFalse(element,index,arr){
                     return element == false;
                 }
-                if(checkCubesResult.some(isContainFalse))
+
+                if(figureIsCanMove(1,0).some(isContainFalse))
                 {
                     generateNewFigure();
                 }
@@ -140,16 +107,67 @@ $(window).keydown(function(e){
         break;
         case 39:{
             function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
-                return element > (frontGrid[0].length - 2);                     //если хотя бы один кубик меньше единицы, то срабатывает
+                return element > (frontGrid[0].length - 2);
             }
-            
-            if(!(allX.some(isMoreZero))){   //если коллбек не сработал, то двигаем
-                moveCurrentFigure(0,1);
+            function isContainFalse(element,index,arr){
+               return element == false;
+            } 
+
+            if(!(allX.some(isMoreZero))){
+                if(!figureIsCanMove(0,1).some(isContainFalse))
+                {
+                    moveCurrentFigure(0,1);
+                }
             }
         }
         break;
     }
 })
+
+function figureIsCanMove (directionY, directionX){
+
+    let checkCubesResult = []; //так как проверяется каждый куб фигуры по отдельности, то результаты проверки складываются в массив
+
+    for(let key in currentFigure.cubes){ //пробегаем по ЯЧЕЙКАМ, куда фигура хочет переместиться
+
+        let currentY = (currentFigure.cubes[key].y + currentFigureWayY + directionY); //запоминаем Y координату проверяемой ячейки
+        let currentX = (currentFigure.cubes[key].x + currentFigureWayX + directionX) //запоминаем X координату проверяемой ячейки
+        
+        let cellUnderCheck = frontGrid[currentY][currentX]; //в переменную запоминаем ЯЧЕЙКУ, которую будем проверять на заполнение
+
+        console.log('check cell by adress y' + currentY + ' x' + currentX);
+
+        if($(cellUnderCheck).hasClass('tetris-cell-yellow')){ //если у ячейки есть класс, то она занята
+            console.log("cell to check is under suspicion","start compare cell with currentFigure's cubes...");
+            
+            function checkCubes(){ //сравние координат проверяемой ячейки с кубиками фигуры, которая сейчас активна
+                for(let key in currentFigure.cubes){
+                    console.log('compare cube y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' with cell y' + currentY);
+                    if((currentFigure.cubes[key].y + currentFigureWayY) == currentY){
+                        console.log('cF y' + (currentFigure.cubes[key].y + currentFigureWayY) + ' is Equal current cell y' + currentY);
+                        if((currentFigure.cubes[key].x + + currentFigureWayX) == currentX){
+                            console.log('cF x' + (currentFigure.cubes[key].x + currentFigureWayX) + ' is Equal current cell x' + currentX);
+                            console.log('the cell to check is occupied by currentFigure cube');
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if(checkCubes()){
+                checkCubesResult.push(true);
+            }
+            else{
+                checkCubesResult.push(false);
+            }
+        }
+        else{
+            checkCubesResult.push(true);
+        }
+    }
+
+    return(checkCubesResult);
+}
 
 function checkPosition(){ //пеоебираем кубики фигуры и проверяем их колизию
     console.log('check position');
@@ -158,21 +176,12 @@ function checkPosition(){ //пеоебираем кубики фигуры и п
             console.log('position is bottom');
             return true;
         }
-        //else{
-            //if($(frontGrid[currentFigure[key].y+1][currentFigure[key].x]).hasClass('tetris-cell-yellow')){
-             //   alert('a');
-            //} возможная механика колизии
     }
 }
 
 function moveCurrentFigure(directionY,directionX){
     drawCurrentFigure(); // закрашеваем старое положение фигуры   
-
-    // for(let key in currentFigure){ //пробегаемся по кубикам
-    //     currentFigure[key].x += directionX; 
-    //     currentFigure[key].y += directionY;
-    // }
-
+    
     currentFigureWayX += directionX;
     currentFigureWayY += directionY; //корректируем текущие координаты
 
