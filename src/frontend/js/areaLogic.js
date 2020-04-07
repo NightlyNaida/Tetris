@@ -1,15 +1,6 @@
 export var frontGrid = []; //массив из div, которые служат ячейками
 
-//переносим игровую арену на центр
-function setGameAreaCenter(){
-    var area = $('.tetris-area')[0];
-    console.log(area);
 
-    var center = document.body.clientWidth / 2 - area.getBoundingClientRect().width / 2;
-    console.log('center is ' + center)
-
-    $(area).css('left',center);
-}
 
 //добавление клеток в поле
 function setCells(){
@@ -46,4 +37,3 @@ function makeFrontGrid(){
 
 setCells();
 makeFrontGrid();
-setGameAreaCenter();

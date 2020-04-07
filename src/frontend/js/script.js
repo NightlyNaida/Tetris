@@ -7,6 +7,20 @@ var currentFigureWayY = 0;
 
 var currentFigure;
 
+var gameDificult = 1000;
+
+var allXCoordinates = [];
+var allYCoordinates = [];
+
+function fillallXallY(){
+    for(let key in currentFigure.cubes){
+        allXCoordinates.push(currentFigure.cubes[key].x + currentFigureWayX);
+        allYCoordinates.push(currentFigure.cubes[key].y) + currentFigureWayY;
+    }
+}
+
+
+
 function setCurrentFigure(figure,rotate){
 
     //console.log('start set figure ' + figure.name);
@@ -51,17 +65,12 @@ setCurrentFigure(figures['L_figure_flp'],3); //стартовая фигура
 
 
 $(window).keydown(function(e){
-    var allX = []; //сгружаем координаты всех кубиков фигруы в массивы
-    var allY = [];
-    for(let key in currentFigure.cubes){
-        allX.push(currentFigure.cubes[key].x + currentFigureWayX);
-        allY.push(currentFigure.cubes[key].y) + currentFigureWayY;
-    }
 
+    fillallXallY();
 
     switch(e.keyCode){
         case 13:{
-            checkRowsForFull();
+            gameStart();
         }
         break;
 
@@ -70,64 +79,76 @@ $(window).keydown(function(e){
         }
         break;
         case 37:{
-            function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
-                return element < 1;                     //если хотя бы один кубик меньше единицы, то срабатывает
-            }
-            function isContainFalse(element,index,arr){
-                return element == false;
-            } 
-            
-            if(!(allX.some(isMoreZero))){   //если коллбек не сработал, то двигаем
-                if(!figureIsCanMove(0,-1).some(isContainFalse))
-                {
-                    moveCurrentFigure(0,-1);
-                }
-            }
-
+            moveFigureLeft();
         }
         break;
         case 40:{
-
-            function isMoreBottomCell(element,index,arr) { //коллбек для метода проверки массива
-                return element > frontGrid.length - 2; //если хотя бы один кубик равен нижней границе, то срабатывает
-            }
-
-            if(!(allY.some(isMoreBottomCell))){ //сначала проверяем ограничение по полю, а затем проверяем пространство ниже каждого
-                //console.log('start check place below figure...');
-
-                function isContainFalse(element,index,arr){
-                    return element == false;
-                }
-
-                if(figureIsCanMove(1,0).some(isContainFalse))
-                {
-                    generateNewFigure();
-                }
-                else
-                {
-                    moveCurrentFigure(1,0);
-                }
-            }
+            moveFigureDown();
         }
         break;
         case 39:{
-            function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
-                return element > (frontGrid[0].length - 2);
-            }
-            function isContainFalse(element,index,arr){
-               return element == false;
-            } 
-
-            if(!(allX.some(isMoreZero))){
-                if(!figureIsCanMove(0,1).some(isContainFalse))
-                {
-                    moveCurrentFigure(0,1);
-                }
-            }
+            moveFigureRight();
         }
         break;
     }
 })
+
+
+function moveFigureRight(){
+    function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
+        return element > (frontGrid[0].length - 2);
+    }
+    function isContainFalse(element,index,arr){
+       return element == false;
+    } 
+
+    if(!(allXCoordinates.some(isMoreZero))){
+        if(!figureIsCanMove(0,1).some(isContainFalse))
+        {
+            moveCurrentFigure(0,1);
+        }
+    }
+}
+
+function moveFigureDown(){
+    function isMoreBottomCell(element,index,arr) { //коллбек для метода проверки массива
+        return element > frontGrid.length - 2; //если хотя бы один кубик равен нижней границе, то срабатывает
+    }
+
+    if(!(allYCoordinates.some(isMoreBottomCell))){ //сначала проверяем ограничение по полю, а затем проверяем пространство ниже каждого
+        //console.log('start check place below figure...');
+
+        function isContainFalse(element,index,arr){
+            return element == false;
+        }
+
+        if(figureIsCanMove(1,0).some(isContainFalse))
+        {
+            generateNewFigure();
+        }
+        else
+        {
+            moveCurrentFigure(1,0);
+        }
+    }
+}
+
+function moveFigureLeft(){
+
+    function isMoreZero(element,index,arr) { //коллбек для метода проверки массива
+        return element < 1;                     //если хотя бы один кубик меньше единицы, то срабатывает
+    }
+    function isContainFalse(element,index,arr){
+        return element == false;
+    } 
+    
+    if(!(allXCoordinates.some(isMoreZero))){   //если коллбек не сработал, то двигаем
+        if(!figureIsCanMove(0,-1).some(isContainFalse))
+        {
+            moveCurrentFigure(0,-1);
+        }
+    }
+}
 
 function figureIsCanMove (directionY, directionX){
 
@@ -311,5 +332,8 @@ function dropDownCubes(index){
 
 drawCurrentFigure();
 
+function gameStart(){
+    setInterval(moveFigureDown,gameDificult);
+}
 
 
